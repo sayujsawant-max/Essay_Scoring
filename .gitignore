@@ -1,0 +1,23 @@
+# --- Large data files (must be downloaded separately; see README) ---
+data/
+# The ASAP dataset (training_set_rel3.tsv) and GloVe embeddings
+# (glove.6B.50d.txt, ~800 MB) exceed GitHub limits and are not committed.
+
+# --- Trained model binaries (regenerable by running the stages) ---
+models/
+*.keras
+*.h5
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

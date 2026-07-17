@@ -1,0 +1,48 @@
+{
+  "headline_metric": "mean_per_set_qwk",
+  "baseline_perprompt_mean_qwk": 0.6721,
+  "bilstm_allsets_mean_qwk": 0.6863,
+  "pooled_qwk_bilstm_MISLEADING": 0.9807,
+  "per_set_qwk": {
+    "1": {
+      "baseline": 0.79,
+      "bilstm": 0.7234,
+      "winner": "baseline"
+    },
+    "2": {
+      "baseline": 0.5796,
+      "bilstm": 0.6113,
+      "winner": "bilstm"
+    },
+    "3": {
+      "baseline": 0.6772,
+      "bilstm": 0.6333,
+      "winner": "baseline"
+    },
+    "4": {
+      "baseline": 0.6894,
+      "bilstm": 0.771,
+      "winner": "bilstm"
+    },
+    "5": {
+      "baseline": 0.8138,
+      "bilstm": 0.7656,
+      "winner": "baseline"
+    },
+    "6": {
+      "baseline": 0.6197,
+      "bilstm": 0.7737,
+      "winner": "bilstm"
+    },
+    "7": {
+      "baseline": 0.6536,
+      "bilstm": 0.719,
+      "winner": "bilstm"
+    },
+    "8": {
+      "baseline": 0.5535,
+      "bilstm": 0.4932,
+      "winner": "baseline"
+    }
+  }
+}

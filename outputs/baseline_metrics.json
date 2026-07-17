@@ -1,0 +1,18 @@
+{
+  "model": "baseline_linear_regression",
+  "essay_sets": [
+    1
+  ],
+  "metrics": {
+    "rmse": 0.8650673378507866,
+    "mae": 0.6894027279384101,
+    "qwk": 0.789970134922372
+  },
+  "coefficients": {
+    "word_count": 0.10040000081062317,
+    "sentence_count": 0.012799999676644802,
+    "avg_word_length": 0.029400000348687172,
+    "unique_word_ratio": 0.0006000000284984708,
+    "spelling_error_count": 0.007199999876320362
+  }
+}

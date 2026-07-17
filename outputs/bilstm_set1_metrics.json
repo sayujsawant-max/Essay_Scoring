@@ -1,0 +1,29 @@
+{
+  "model": "bilstm",
+  "essay_sets": [
+    1
+  ],
+  "metrics": {
+    "rmse": 1.1047928570243553,
+    "mae": 0.8766943892436241,
+    "qwk": 0.7046402661239612
+  },
+  "glove_coverage": {
+    "vocab_size_used": 12648,
+    "words_in_vocab": 12647,
+    "words_with_glove_vector": 9278,
+    "coverage_fraction": 0.7336,
+    "words_random_init": 3369,
+    "placeholder_glove_hit": {
+      "person": true,
+      "location": true,
+      "organization": true,
+      "caps": true,
+      "date": true,
+      "time": true,
+      "money": true,
+      "percent": true,
+      "num": true
+    }
+  }
+}

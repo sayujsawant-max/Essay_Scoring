@@ -1,0 +1,85 @@
+Train/val/test sizes: 9082/1947/1947
+Steps per epoch (batch 32): 284
+
+Building GloVe embedding matrix (streaming the file)...
+  Vocabulary words: 19999
+  Got a GloVe vector: 15479 (77.4%)
+  Random-init (no GloVe): 4520
+  Anonymisation placeholders found in GloVe: {'person': True, 'location': True, 'organization': True, 'caps': True, 'date': True, 'time': True, 'money': True, 'percent': True, 'num': True}
+
+Building model...
+Model: "BiLSTM_AES"
++--------------------------------------------------------------------------+
+| Layer (type)        | Output Shape      |    Param # | Connected to      |
+|---------------------+-------------------+------------+-------------------|
+| essay_tokens        | (None, 800)       |          0 | -                 |
+| (InputLayer)        |                   |            |                   |
+|---------------------+-------------------+------------+-------------------|
+| glove_embedding     | (None, 800, 50)   |  1,000,000 | essay_tokens[0][… |
+| (Embedding)         |                   |            |                   |
+|---------------------+-------------------+------------+-------------------|
+| not_equal           | (None, 800)       |          0 | essay_tokens[0][… |
+| (NotEqual)          |                   |            |                   |
+|---------------------+-------------------+------------+-------------------|
+| bilstm              | (None, 800, 128)  |     58,880 | glove_embedding[… |
+| (Bidirectional)     |                   |            | not_equal[0][0]   |
+|---------------------+-------------------+------------+-------------------|
+| mean_over_time      | (None, 128)       |          0 | bilstm[0][0],     |
+| (GlobalAveragePool… |                   |            | not_equal[0][0]   |
+|---------------------+-------------------+------------+-------------------|
+| dropout_1 (Dropout) | (None, 128)       |          0 | mean_over_time[0… |
+|---------------------+-------------------+------------+-------------------|
+| dense_hidden        | (None, 32)        |      4,128 | dropout_1[0][0]   |
+| (Dense)             |                   |            |                   |
+|---------------------+-------------------+------------+-------------------|
+| dropout_2 (Dropout) | (None, 32)        |          0 | dense_hidden[0][… |
+|---------------------+-------------------+------------+-------------------|
+| score_0_1 (Dense)   | (None, 1)         |         33 | dropout_2[0][0]   |
++--------------------------------------------------------------------------+
+ Total params: 1,063,041 (4.06 MB)
+ Trainable params: 1,063,041 (4.06 MB)
+ Non-trainable params: 0 (0.00 B)
+
+Training...
+
+Epoch 1/30
+284/284 - 89s - 312ms/step - loss: 0.0438 - mae: 0.1641 - val_loss: 0.0293 - val_mae: 0.1318
+Epoch 2/30
+284/284 - 80s - 283ms/step - loss: 0.0262 - mae: 0.1266 - val_loss: 0.0212 - val_mae: 0.1139
+Epoch 3/30
+284/284 - 80s - 283ms/step - loss: 0.0214 - mae: 0.1140 - val_loss: 0.0217 - val_mae: 0.1165
+Epoch 4/30
+284/284 - 81s - 286ms/step - loss: 0.0194 - mae: 0.1093 - val_loss: 0.0217 - val_mae: 0.1170
+Epoch 5/30
+284/284 - 83s - 292ms/step - loss: 0.0173 - mae: 0.1022 - val_loss: 0.0179 - val_mae: 0.1055
+Epoch 6/30
+284/284 - 84s - 296ms/step - loss: 0.0156 - mae: 0.0973 - val_loss: 0.0182 - val_mae: 0.1060
+Epoch 7/30
+284/284 - 85s - 300ms/step - loss: 0.0145 - mae: 0.0931 - val_loss: 0.0184 - val_mae: 0.1063
+Epoch 8/30
+284/284 - 90s - 316ms/step - loss: 0.0130 - mae: 0.0883 - val_loss: 0.0191 - val_mae: 0.1079
+Epoch 9/30
+284/284 - 87s - 308ms/step - loss: 0.0124 - mae: 0.0861 - val_loss: 0.0195 - val_mae: 0.1089
+Epoch 10/30
+284/284 - 93s - 326ms/step - loss: 0.0118 - mae: 0.0836 - val_loss: 0.0202 - val_mae: 0.1102
+Epoch 11/30
+284/284 - 88s - 311ms/step - loss: 0.0115 - mae: 0.0821 - val_loss: 0.0200 - val_mae: 0.1095
+Epoch 11: early stopping
+Restoring model weights from the end of the best epoch: 5.
+
+---------------- BiLSTM RESULTS (test set) ----------------
+  OVERALL  RMSE=1.6567  MAE=0.9011  QWK=0.9807
+  Per-set QWK (honest breakdown):
+     set     n    RMSE     MAE     QWK
+       1   268   0.970   0.762   0.723
+       2   270   0.566   0.464   0.611
+       3   259   0.583   0.448   0.633
+       4   265   0.540   0.450   0.771
+       5   271   0.525   0.418   0.766
+       6   270   0.526   0.435   0.774
+       7   235   2.968   2.324   0.719
+       8   109   4.904   3.786   0.493
+-----------------------------------------------------------
+
+Saved model -> C:\Users\sayuj\aes-microproject\models\bilstm_allsets_best.keras
+Saved metrics/history/predictions ('allsets') -> C:\Users\sayuj\aes-microproject\outputs
