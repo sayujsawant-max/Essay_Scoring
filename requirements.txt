@@ -6,3 +6,5 @@ scikit-learn>=1.3
 matplotlib>=3.7
 nltk>=3.8
 tensorflow>=2.16   # CPU-only latest TF (native on Windows, Python 3.12)
+streamlit>=1.30    # web demo (streamlit run demo_app.py)
+python-docx>=1.0   # report generation (build_report.py)

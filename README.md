@@ -29,6 +29,19 @@ aes-microproject/
 pip install -r requirements.txt
 ```
 
+## Interactive demo (Streamlit web UI)
+Paste an essay, pick the prompt, and the trained BiLSTM predicts a score.
+```bash
+# 1. train the all-sets model (produces models/bilstm_allsets_best.keras)
+python src/stage_d_bilstm.py
+# 2. regenerate the demo's tokenizer + example essays
+python src/save_demo_artifacts.py
+# 3. launch the web UI at http://localhost:8501
+streamlit run demo_app.py
+```
+This runs a **local** server on demand (localhost only) while open; it is not a
+deployed/always-on service. Nothing else in the project needs a server.
+
 ## Action needed
 Drop these two files into `data/`:
 1. `training_set_rel3.tsv`  (from the Kaggle ASAP competition)

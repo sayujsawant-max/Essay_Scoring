@@ -21,3 +21,6 @@ venv/
 Thumbs.db
 .vscode/
 .idea/
+
+# transient run logs
+outputs/streamlit_log.txt
