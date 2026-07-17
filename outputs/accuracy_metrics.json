@@ -1,0 +1,38 @@
+{
+  "per_set": {
+    "1": {
+      "exact": 0.4552,
+      "adjacent": 0.8657
+    },
+    "2": {
+      "exact": 0.6222,
+      "adjacent": 0.9926
+    },
+    "3": {
+      "exact": 0.6757,
+      "adjacent": 0.9691
+    },
+    "4": {
+      "exact": 0.6528,
+      "adjacent": 1.0
+    },
+    "5": {
+      "exact": 0.6605,
+      "adjacent": 0.9926
+    },
+    "6": {
+      "exact": 0.6481,
+      "adjacent": 0.9889
+    },
+    "7": {
+      "exact": 0.1404,
+      "adjacent": 0.4213
+    },
+    "8": {
+      "exact": 0.0826,
+      "adjacent": 0.2844
+    }
+  },
+  "mean_exact": 0.4922,
+  "mean_adjacent": 0.8143
+}

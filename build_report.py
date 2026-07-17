@@ -10,12 +10,22 @@ outputs/ and figures/.
 """
 
 import os
+import json
 from docx import Document
 from docx.shared import Pt, Inches, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 FIG = os.path.join(ROOT, "figures")
+OUT = os.path.join(ROOT, "outputs")
+
+
+def load_json(name, default=None):
+    p = os.path.join(OUT, name)
+    if os.path.exists(p):
+        with open(p) as f:
+            return json.load(f)
+    return default
 
 HEADING_BLUE = RGBColor(0x1F, 0x38, 0x64)   # dark blue, like the template headings
 ACCENT_BLUE = RGBColor(0x2E, 0x5B, 0x9A)
@@ -260,6 +270,11 @@ def build_report():
         p.add_run(title).bold = True
         p.add_run(text)
 
+    # Workflow + architecture diagram (fills the template's placeholder).
+    add_figure(doc, os.path.join(FIG, "F3_architecture.png"),
+               "Figure A: End-to-end workflow (top) and BiLSTM model architecture "
+               "(bottom).", width=6.0)
+
     # 2.1 Individual contributions
     heading(doc, "2.1 Individual Contribution to Design Methodology", size=13)
     p = doc.add_paragraph()
@@ -395,6 +410,62 @@ def build_report():
                "separated clusters are exactly why a single pooled QWK is inflated.")
     add_figure(doc, os.path.join(FIG, "E4_pred_vs_actual_per_set.png"),
                "Figure 7: BiLSTM predicted vs actual, per set, with QWK annotated.")
+
+    # 3.4 Agreement heatmaps
+    body(doc, "3.4 Agreement (Confusion) Heatmaps", bold=True, justify=False)
+    body(doc,
+         "Figure 8 shows, for each prompt, a heatmap of actual versus predicted "
+         "score. Most of the mass lies on or immediately next to the diagonal, "
+         "confirming that when the model is wrong it is usually wrong by only one "
+         "point rather than badly mis-scoring. The wide-scale prompts (Sets 7 and 8) "
+         "show a diagonal band rather than exact cells, which is expected on a 0-30 "
+         "or 0-60 scale.")
+    add_figure(doc, os.path.join(FIG, "F1_confusion_heatmaps.png"),
+               "Figure 8: Per-set agreement heatmaps (actual vs predicted); the red "
+               "line is perfect agreement.")
+
+    # 3.5 Exact and adjacent accuracy
+    acc = load_json("accuracy_metrics.json", {"per_set": {}, "mean_exact": 0,
+                                              "mean_adjacent": 0})
+    body(doc, "3.5 Exact and Adjacent Agreement Accuracy", bold=True, justify=False)
+    body(doc,
+         "Although essay scoring is a regression task (so RMSE, MAE and QWK are the "
+         "primary metrics), two accuracy-style measures are also informative: exact "
+         "agreement (predicted score equals the human score) and adjacent agreement "
+         "(within one point). Across all prompts the BiLSTM reaches "
+         f"{acc['mean_exact']*100:.1f}% exact and {acc['mean_adjacent']*100:.1f}% "
+         "adjacent agreement. These are reported as secondary, scale-dependent "
+         "metrics: on narrow scales (Sets 2-6) adjacent agreement is 97-100%, whereas "
+         "on the 0-60 scale of Set 8 a one-point tolerance is far stricter, which is "
+         "exactly why the scale-aware QWK remains the primary metric.")
+    if acc["per_set"]:
+        rows = [[s, f"{acc['per_set'][str(s)]['exact']*100:.1f}%",
+                 f"{acc['per_set'][str(s)]['adjacent']*100:.1f}%"]
+                for s in range(1, 9)]
+        rows.append(["Mean", f"{acc['mean_exact']*100:.1f}%",
+                     f"{acc['mean_adjacent']*100:.1f}%"])
+        add_table(doc, ["Set", "Exact agreement", "Adjacent (within 1)"], rows)
+
+    # 3.6 Length-bias analysis (ethics)
+    lb = load_json("length_bias.json", {"means": {}})
+    m = lb.get("means", {})
+    body(doc, "3.6 Length-Bias Analysis (Ethical Consideration)", bold=True,
+         justify=False)
+    if m:
+        body(doc,
+             "A key ethical concern in AES is a model rewarding sheer essay length "
+             "instead of genuine quality. To test this, we measured how strongly each "
+             "model's predicted score correlates with essay length, and compared it "
+             "with how strongly the HUMAN score does. Averaged over all prompts, the "
+             f"human score correlates with length at {m['human']:+.2f}. The "
+             f"handcrafted baseline over-relies on length at {m['baseline']:+.2f} — "
+             "unsurprising, since its dominant feature is word count. The BiLSTM sits "
+             f"at {m['bilstm']:+.2f}, closer to the human level, providing evidence "
+             "that it is measurably less length-biased than the baseline and is "
+             "reading content, not just counting words (Figure 9).")
+    add_figure(doc, os.path.join(FIG, "F2_length_bias.png"),
+               "Figure 9: Correlation of essay length with score, per set — a bar "
+               "closer to the green 'human' bar indicates less length-bias.")
 
     # ---------------- 4. CONCLUSION ----------------
     heading(doc, "4. CONCLUSION AND FUTURE SCOPE")

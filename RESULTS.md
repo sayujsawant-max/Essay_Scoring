@@ -66,6 +66,23 @@ Smallest training set (505 essays), **widest scale (0–60)**, and fewest test
 essays (109) → hardest to learn and noisiest to measure; ~26% of its essays
 still exceed the 800-token window (secondary factor).
 
+## Agreement accuracy (secondary, scale-dependent)
+Exact agreement (predicted == human) and adjacent (within ±1), BiLSTM:
+**mean 49.2% exact, 81.4% adjacent.** On narrow scales (Sets 2–6) adjacent is
+97–100%; on Set 8's 0–60 scale a ±1 tolerance is far stricter — which is exactly
+why the scale-aware QWK stays the primary metric.
+
+## Length-bias analysis (ethics — evidence, not just a claim)
+Correlation of essay length with score, averaged over prompts:
+| Source | Length correlation |
+|---|---|
+| Human score | +0.68 |
+| Baseline prediction | **+0.87** (over-relies on length) |
+| BiLSTM prediction | **+0.76** (closer to human = less biased) |
+
+The BiLSTM is measurably **less length-biased** than the length-driven baseline —
+concrete support for the "reads content, not just length" thesis.
+
 ## Figures index
 | File | What it shows |
 |---|---|
@@ -73,6 +90,9 @@ still exceed the 800-token window (secondary factor).
 | `E2_loss_curves.png` | Train/val loss: set-1 (overfits) vs all-sets (healthier) |
 | `E3_pred_vs_actual_pooled.png` | Pooled scatter, coloured by set — the pooling mirage |
 | `E4_pred_vs_actual_per_set.png` | Per-set scatter, BiLSTM, QWK annotated |
+| `F1_confusion_heatmaps.png` | Per-set actual-vs-predicted agreement heatmaps |
+| `F2_length_bias.png` | Length-vs-score correlation: human vs baseline vs BiLSTM |
+| `F3_architecture.png` | Workflow + BiLSTM layer-stack diagram |
 
 ## Conclusion (for Section 4)
 Deep learning **is** suitable for AES: a single BiLSTM reading only essay text
